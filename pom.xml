@@ -2,13 +2,15 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.monk</groupId>
   <artifactId>customer</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
+
   <modules>
+  		<module>customer-common</module>
 		<module>customer-web</module>
 		<module>customer-service</module>
-		<module>customer-common</module>
   </modules>
+  
   <name>customer</name>
 	<url>http://maven.apache.org</url>
 	<properties>
@@ -478,11 +480,4 @@
 			</plugin>
 		</plugins>
 	</build>
-  
-  
-  
-  
-  
-  
-	
 </project>

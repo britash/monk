@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.monk.customer.service.dal.CalenderMapper">
+
+	<resultMap id="CalenderResultMap" type="CalenderEntity" >
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+		<result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="color" property="color" jdbcType="VARCHAR" />
+		<result column="urgent" property="urgent" jdbcType="TINYINT" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		
+		<result column="admin_id" property="admin.id" jdbcType="BIGINT" />
+		<result column="admin_name" property="admin.name" jdbcType="VARCHAR" />
+		<result column="admin_username" property="admin.username" jdbcType="VARCHAR" />
+		<result column="admin_email" property="admin.email" jdbcType="VARCHAR" />
+		<result column="admin_telephone" property="admin.telephone" jdbcType="VARCHAR" />
+		
+		<result column="client_id" property="client.id" jdbcType="BIGINT" />
+		<result column="client_name" property="client.name" jdbcType="VARCHAR" />
+		<result column="client_username" property="client.username" jdbcType="VARCHAR" />
+		<result column="client_email" property="client.email" jdbcType="VARCHAR" />
+		<result column="client_telephone" property="client.telephone" jdbcType="VARCHAR" />
+	 </resultMap>
+
+	<!-- insert -->
+	<insert id="insert" parameterType="CalenderEntity"
+		keyProperty="id" useGeneratedKeys="true">
+	<![CDATA[
+		INSERT INTO calendar (
+		title,start_time,end_time,create_time,color,urgent,status,admin_id,client_id)VALUES(
+		#{title,jdbcType=VARCHAR},
+		#{startTime,jdbcType=TIMESTAMP},
+		#{endTime,jdbcType=TIMESTAMP},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{color,jdbcType=VARCHAR},
+		#{urgent,jdbcType=TINYINT},
+		#{status,jdbcType=TINYINT},
+		#{admin.id,jdbcType=INTEGER},
+		#{client.id,jdbcType=INTEGER}
+		)
+	]]>
+	</insert>
+
+	<!-- update -->
+	<update id="update" parameterType="CalenderEntity">
+	<![CDATA[
+		UPDATE
+		calendar 
+		SET
+		 id=#{id}
+		 ]]>
+		 <if test="null != title">
+			<![CDATA[
+		,title = #{title}
+			]]>
+		</if>
+		
+		<if test="null != startTime">
+			<![CDATA[
+		,start_time = #{startTime}
+			]]>
+		</if>
+		
+			<if test="null != endTime">
+			<![CDATA[
+		,end_time = #{endTime}
+			]]>
+		</if>
+		 
+		 <if test="null != color">
+			<![CDATA[
+		,color = #{color}
+			]]>
+		</if>
+		 
+		 <if test="null != urgent">
+			<![CDATA[
+		,urgent = #{urgent}
+			]]>
+		</if>
+		<if test="null != status">
+			<![CDATA[
+		,status = #{status}
+			]]>
+		</if>
+		<![CDATA[
+		WHERE  id = #{id} 
+	]]>
+	</update>
+
+	<!-- delete -->
+	<delete id="delete" parameterType="Long">
+	<![CDATA[
+		DELETE FROM calendar WHERE id = #{id}
+	]]>
+	</delete>
+	
+	<sql id="column_List" >
+   	 a.id,a.title,a.start_time,a.end_time,a.create_time,a.color,a.urgent,a.status,a.admin_id,a.client_id
+  	</sql>
+	
+	<!-- select detail -->
+	<select id="get" parameterType="java.lang.Long" resultMap="CalenderResultMap">
+		SELECT 
+		<include refid="column_List" /> 
+		, admin.name admin_name, admin.username admin_username, admin.email admin_email, admin.telephone admin_telephone
+		, client.name client_name, client.username client_username, client.email client_email, client.telephone client_telephone
+		from   calendar a, user admin, user client
+		where  a.id = #{id} and a.client_id = client.id and a.admin_id = admin.id
+	</select>
+	
+	<!-- list -->
+	<select id="findByExample" resultMap="CalenderResultMap"	parameterType="CalenderEntityExample">
+	SELECT 
+		<include refid="column_List" /> 
+		, admin.name admin_name, admin.username admin_username, admin.email admin_email, admin.telephone admin_telephone
+		, client.name client_name, client.username client_username, client.email client_email, client.telephone client_telephone
+		from   calendar a, user admin, user client
+		
+	 	 <if test="_parameter != null" >
+	     	 <include refid="BaseMapper.Example_Where_Clause" />
+	     	 and a.client_id = client.id and a.admin_id = admin.id
+	        <include refid="BaseMapper.Example_Order_Clause" />
+			<include refid="BaseMapper.Example_Limit_Clause" />
+	       
+	    </if>
+	</select>
+	
+		<select id="countByExample" resultType="Integer"	parameterType="CalenderEntityExample">
+	SELECT 	count(*)
+		from   calendar a, user admin, user client
+	 	 <if test="_parameter != null" >
+	     	 <include refid="BaseMapper.Example_Where_Clause" />
+	     	 and a.client_id = client.id and a.admin_id = admin.id
+	    </if>
+	</select>
+</mapper>

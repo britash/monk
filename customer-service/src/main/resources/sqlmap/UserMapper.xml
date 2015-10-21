@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.monk.customer.service.dal.UserMapper">
+
+	<resultMap id="UserResultMap" type="UserEntity" >
+	    <id column="id" property="id" jdbcType="BIGINT" />
+	    <result column="username" property="username" jdbcType="VARCHAR" />
+	    <result column="password" property="password" jdbcType="VARCHAR"/>
+	    <result column="name" property="name" jdbcType="VARCHAR" />
+	    <result column="email" property="email" jdbcType="VARCHAR" />
+	    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+	    <result column="register_time" property="registerTime" jdbcType="TIMESTAMP" />
+	    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	    <result column="register_ip" property="registerIp" jdbcType="VARCHAR" />
+	    <result column="last_login_time" property="lastLoginTime" jdbcType="VARCHAR" />
+	    <result column="last_login_ip" property="lastLoginIp" jdbcType="VARCHAR" />
+	    <result column="status" property="status" jdbcType="TINYINT" />
+	    <result column="type" property="type" jdbcType="TINYINT" />
+	    <result column="other_company" property="otherCompany" jdbcType="VARCHAR" />
+	 </resultMap>
+	 
+
+	<!-- insert -->
+	<insert id="insert" parameterType="UserEntity"
+		keyProperty="id" useGeneratedKeys="true">
+	<![CDATA[
+		INSERT INTO user (
+	username,password,name,email,telephone,register_time,update_time,register_ip,last_login_time,last_login_ip,status,type,other_company)VALUES(
+		#{username,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},#{telephone,jdbcType=VARCHAR},
+		#{registerTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP},#{registerIp,jdbcType=VARCHAR},#{lastLoginTime,jdbcType=TIMESTAMP},
+		#{lastLoginIp,jdbcType=VARCHAR},#{status,jdbcType=TINYINT},#{type,jdbcType=TINYINT},#{otherCompany,jdbcType=VARCHAR})
+	]]>
+	</insert>
+
+	<!-- update -->
+	<update id="update" parameterType="UserEntity">
+	<![CDATA[
+		UPDATE
+		user 
+		SET 
+		 id=#{id}
+	]]>
+		<if test="null != password">
+	<![CDATA[
+,password = #{password}
+	]]>
+		</if>
+		<if test="null != name">
+	<![CDATA[
+,name = #{name}
+	]]>
+		</if>
+		<if test="null != email">
+	<![CDATA[
+,email = #{email}
+	]]>
+		</if>
+		
+		<if test="null != telephone">
+	<![CDATA[
+,telephone = #{telephone}
+	]]>
+		</if>
+		
+		
+		<if test="null != type">
+	<![CDATA[
+,type = #{type}
+	]]>
+		</if>
+		
+			<if test="null != status">
+	<![CDATA[
+,status = #{status}
+	]]>
+		</if>
+		
+			<if test="null != lastLoginTime">
+	<![CDATA[
+,last_login_time = #{lastLoginTime}
+	]]>
+		</if>
+		
+			<if test="null != lastLoginIp">
+	<![CDATA[
+,last_login_ip = #{lastLoginIp}
+	]]>
+		</if>
+		
+		
+	<if test="null != otherCompany">
+	<![CDATA[
+,other_company = #{otherCompany}
+	]]>
+		</if>
+		
+		<choose>  
+            <when test="updateTime !=null ">  
+                <![CDATA[
+					,update_time = #{updateTime}
+				]]>
+            </when >
+		  <otherwise> 
+		  	 <![CDATA[
+					,update_time = now()
+				]]> 
+            </otherwise>  
+         </choose>
+         
+	<![CDATA[
+
+		WHERE  id = #{id} 
+	]]>
+	</update>
+
+	<!-- delete -->
+	<delete id="delete" parameterType="Long">
+	<![CDATA[
+		DELETE FROM user WHERE id = #{id}
+	]]>
+	</delete>
+	
+	<sql id="column_List" >
+   	 a.id,a.username,a.password,a.name,a.email,a.telephone,a.register_time,a.update_time,a.register_ip,a.last_login_time,a.last_login_ip,a.status,a.type,a.other_company
+  </sql>
+	
+	<!-- select detail -->
+	<select id="get" parameterType="java.lang.Long" resultMap="UserResultMap">
+		SELECT 
+		<include refid="column_List" />
+		from   user a
+		where  a.id = #{id}
+	</select>
+	
+	<!-- list -->
+	<select id="findByExample" resultMap="UserResultMap"	parameterType="UserEntityExample">
+	SELECT 	<include refid="column_List" />
+		FROM user a
+	 	 <if test="_parameter != null" >
+	 	 
+	     	 <include refid="BaseMapper.Example_Where_Clause" />
+		
+	        <include refid="BaseMapper.Example_Order_Clause" />
+			<include refid="BaseMapper.Example_Limit_Clause" />
+	       
+	    </if>
+	</select>
+	
+		<select id="countByExample" resultType="Integer"	parameterType="UserEntityExample">
+	SELECT 	count(*)
+		FROM user a
+	 	 <if test="_parameter != null" >
+	     	 <include refid="BaseMapper.Example_Where_Clause" />
+	    </if>
+	</select>
+</mapper>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.monk.customer.service.dal.ProjectMapper">
+
+	<resultMap id="ProjectResultMap" type="ProjectEntity" >
+		<id column="id" property="id" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="remarks" property="remarks" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="steps" property="steps" jdbcType="VARCHAR" />
+		<result column="next_step" property="nextStep" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="upate_time" property="updateTime" jdbcType="TIMESTAMP" />
+		
+		<result column="factory_id" property="factory.id"/>
+		<result column="factory_name" property="factory.name" jdbcType="VARCHAR" />
+	 </resultMap>
+
+	<!-- insert -->
+	<insert id="insert" parameterType="ProjectEntity"
+		keyProperty="id" useGeneratedKeys="true">
+	<![CDATA[
+		INSERT INTO project (
+		name,remarks,address,status,steps,next_step,create_time,upate_time,factory_id)VALUES(
+		#{name,jdbcType=VARCHAR},
+		#{remarks,jdbcType=VARCHAR},
+		#{address,jdbcType=VARCHAR},
+		#{status,jdbcType=TINYINT},
+		#{steps,jdbcType=VARCHAR},
+		#{nextStep,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{upateTime,jdbcType=upate_time},
+		#{factory.id}
+		)
+	]]>
+	</insert>
+
+	<!-- update -->
+	<update id="update" parameterType="ProjectEntity">
+	<![CDATA[
+		UPDATE
+		project 
+		SET
+		 id=#{id}
+		 ]]>
+		 <if test="null != name">
+			<![CDATA[
+		,name = #{name}
+			]]>
+		</if>
+		 <if test="null != remarks">
+			<![CDATA[
+		,remarks = #{remarks}
+			]]>
+		</if>
+		 <if test="null != address">
+			<![CDATA[
+		,address = #{address}
+			]]>
+		</if>
+		<if test="null != status">
+			<![CDATA[
+		,status = #{status}
+			]]>
+		</if>
+		
+		 <if test="null != steps">
+			<![CDATA[
+		,steps = #{steps}
+			]]>
+		</if>
+		 <if test="null != nextStep">
+			<![CDATA[
+		,next_step = #{nextStep}
+			]]>
+		</if>
+		
+		 <if test="null != factory.id">
+			<![CDATA[
+		,factory_id = #{factory.id}
+			]]>
+		</if>
+		
+		<choose>  
+            <when test="upateTime !=null ">  
+                <![CDATA[
+					,upate_time = #{upateTime}
+				]]>
+            </when >
+		  <otherwise> 
+		  	 <![CDATA[
+					,upate_time = now()
+				]]> 
+            </otherwise>  
+         </choose>
+		
+		<![CDATA[
+		WHERE  id = #{id} 
+	]]>
+	</update>
+
+	<!-- delete -->
+	<delete id="delete" parameterType="Long">
+	<![CDATA[
+		DELETE FROM project WHERE id = #{id}
+	]]>
+	</delete>
+	
+	<sql id="column_List" >
+   	 a.id,a.name,a.remarks,a.address,a.status,a.steps,a.next_step,a.create_time,a.upate_time,a.factory_id
+  	</sql>
+	
+	<!-- select detail -->
+	<select id="get" parameterType="java.lang.Long" resultMap="ProjectResultMap">
+		SELECT 
+		<include refid="column_List" /> 
+		, b.name factory_name
+		from   project a,factory b 
+		where  a.id = #{id} and a.factory_id = b.id
+	</select>
+	
+	<!-- list -->
+	<select id="findByExample" resultMap="ProjectResultMap"	parameterType="ProjectEntityExample">
+	SELECT 
+		<include refid="column_List" /> 
+		, b.name factory_name
+		from   project a,factory b 
+		where  a.id = #{id} and a.factory_id = b.id
+		
+	 	 <if test="_parameter != null" >
+	 	 
+	     	 <include refid="BaseMapper.Example_Where_Clause" />
+	     	 and a.factory_id = b.id
+	        <include refid="BaseMapper.Example_Order_Clause" />
+			<include refid="BaseMapper.Example_Limit_Clause" />
+	       
+	    </if>
+	</select>
+	
+		<select id="countByExample" resultType="Integer"	parameterType="ProjectEntityExample">
+	SELECT 	count(*)
+		from   project a,factory b 
+	 	 <if test="_parameter != null" >
+	     	 <include refid="BaseMapper.Example_Where_Clause" />
+	     	and a.factory_id = b.id
+	    </if>
+	</select>
+</mapper>

@@ -12,13 +12,7 @@ public interface Mapper<T, V> {
 
 	int delete(Long id);
 
-	int deleteEntity(T entity);
-
 	public T get(@Param("id") Long id);
-
-	public T getByEntity(T entity);
-
-	public T getDetailByExample(@Param("example")V entityExample);
 
 	public Integer countByExample(@Param("example") V entityExample);
 

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.monk.customer.service.dal.ProgressMapper">
+
+	<resultMap id="ProgressResultMap" type="ProgressEntity" >
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="short_name" property="shortName" jdbcType="VARCHAR" />
+		<result column="priority" property="priority" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="remarks" property="remarks" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	 </resultMap>
+
+	<!-- insert -->
+	<insert id="insert" parameterType="ProgressEntity"
+		keyProperty="id" useGeneratedKeys="true">
+	<![CDATA[
+		INSERT INTO progress (
+		name,short_name,priority,status,remarks,create_time,update_time)VALUES(
+		#{name,jdbcType=VARCHAR},#{shortName,jdbcType=VARCHAR},#{priority,jdbcType=INTEGER},
+		#{status,jdbcType=TINYINT},#{remarks,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP})
+	]]>
+	</insert>
+
+	<!-- update -->
+	<update id="update" parameterType="ProgressEntity">
+	<![CDATA[
+		UPDATE
+		progress 
+		SET
+		 id=#{id}
+
+		WHERE  id = #{id} 
+	]]>
+	</update>
+
+	<!-- delete -->
+	<delete id="delete" parameterType="Long">
+	<![CDATA[
+		DELETE FROM progress WHERE id = #{id}
+	]]>
+	</delete>
+	
+	<sql id="column_List" >
+   	 a.id,a.name,a.short_name,a.priority,a.status,a.remarks,a.create_time,a.update_time
+  	</sql>
+	
+	<!-- select detail -->
+	<select id="get" parameterType="java.lang.Long" resultMap="ProgressResultMap">
+		SELECT 
+		<include refid="column_List" />
+		from   progress a
+		where  a.id = #{id}
+	</select>
+	
+	<!-- list -->
+	<select id="findByExample" resultMap="ProgressResultMap"	parameterType="ProgressEntityExample">
+	SELECT 	<include refid="column_List" />
+		FROM progress a
+	 	 <if test="_parameter != null" >
+	 	 
+	     	 <include refid="BaseMapper.Example_Where_Clause" />
+	        <include refid="BaseMapper.Example_Order_Clause" />
+			<include refid="BaseMapper.Example_Limit_Clause" />
+	       
+	    </if>
+	</select>
+	
+		<select id="countByExample" resultType="Integer"	parameterType="ProgressEntityExample">
+	SELECT 	count(*)
+		FROM progress a
+	 	 <if test="_parameter != null" >
+	     	 <include refid="BaseMapper.Example_Where_Clause" />
+	    </if>
+	</select>
+</mapper>

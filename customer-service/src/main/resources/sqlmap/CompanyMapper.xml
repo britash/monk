@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.monk.customer.service.dal.CompanyMapper">
+
+	<resultMap id="CompanyResultMap" type="CompanyEntity" >
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="upate_time" property="updateTime" jdbcType="TIMESTAMP" />
+	 </resultMap>
+
+	<!-- insert -->
+	<insert id="insert" parameterType="CompanyEntity"
+		keyProperty="id" useGeneratedKeys="true">
+	<![CDATA[
+		INSERT INTO company (
+		name,status,create_time,upate_time)VALUES(
+		#{name,jdbcType=VARCHAR},
+		#{status,jdbcType=TINYINT},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP}
+		)
+	]]>
+	</insert>
+
+	<!-- update -->
+	<update id="update" parameterType="CompanyEntity">
+	<![CDATA[
+		UPDATE
+		company 
+		SET
+		 id=#{id}
+		 ]]>
+		 <if test="null != status">
+			<![CDATA[
+		,status = #{status}
+			]]>
+		</if>
+		
+		 <if test="null != name">
+			<![CDATA[
+		,name = #{name}
+			]]>
+		</if>
+			<choose>  
+            <when test="updateTime !=null ">  
+                <![CDATA[
+					,update_time = #{updateTime}
+				]]>
+            </when >
+		  <otherwise> 
+		  	 <![CDATA[
+					,update_time = now()
+				]]> 
+            </otherwise>  
+         </choose>
+		
+		
+		<![CDATA[
+		WHERE  id = #{id} 
+			]]>
+	</update>
+
+	<!-- delete -->
+	<delete id="delete" parameterType="Long">
+	<![CDATA[
+		DELETE FROM company WHERE id = #{id}
+	]]>
+	</delete>
+	
+	<sql id="column_List" >
+   	 a.id,a.name,a.create_time,a.upate_time
+  	</sql>
+	
+	<!-- select detail -->
+	<select id="get" parameterType="java.lang.Long" resultMap="CompanyResultMap">
+		SELECT 
+		<include refid="column_List" /> 
+		from   company a
+		where  a.id = #{id}
+	</select>
+	
+	<!-- list -->
+	<select id="findByExample" resultMap="CompanyResultMap"	parameterType="CompanyEntityExample">
+	SELECT 
+		<include refid="column_List" /> 
+		from   company a left join user_company b on a.id = b.company_id
+		
+	 	 <if test="_parameter != null" >
+	     	 <include refid="BaseMapper.Example_Where_Clause" />
+	        <include refid="BaseMapper.Example_Order_Clause" />
+			<include refid="BaseMapper.Example_Limit_Clause" />
+	       
+	    </if>
+	</select>
+	
+	<select id="countByExample" resultType="Integer"	parameterType="CompanyEntityExample">
+		SELECT 	count(*)
+		from   company a left join user_company b on a.id = b.company_id
+		 	 <if test="_parameter != null" >
+		     	 <include refid="BaseMapper.Example_Where_Clause" />
+		    </if>
+	</select>
+</mapper>

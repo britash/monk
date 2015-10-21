@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.monk.customer.service.dal.MessageMapper">
+
+	<resultMap id="MessageResultMap" type="MessageEntity" >
+		<id column="id" property="id" jdbcType="BIGINT" />
+		
+		<result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+		<result column="receive_time" property="receiveTime" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		
+		<result column="subject" property="subject" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="attachment" property="attachment" jdbcType="VARCHAR" />
+		
+		<result column="from_id" property="from.id" jdbcType="BIGINT" />
+		<result column="from_name" property="from.name" jdbcType="VARCHAR" />
+		<result column="from_username" property="from.username" jdbcType="VARCHAR" />
+		<result column="from_email" property="from.email" jdbcType="VARCHAR" />
+		<result column="from_telephone" property="from.telephone" jdbcType="VARCHAR" />
+		
+		<result column="to_id" property="to.id" jdbcType="BIGINT" />
+		<result column="to_name" property="to.name" jdbcType="VARCHAR" />
+		<result column="to_username" property="to.username" jdbcType="VARCHAR" />
+		<result column="to_email" property="to.email" jdbcType="VARCHAR" />
+		<result column="to_telephone" property="to.telephone" jdbcType="VARCHAR" />
+	 </resultMap>
+
+	<!-- insert -->
+	<insert id="insert" parameterType="MessageEntity"
+		keyProperty="id" useGeneratedKeys="true">
+	<![CDATA[
+		INSERT INTO message (
+		send_time,receive_time,status,subject,content,attachment,from,to)VALUES(
+		#{sendTime,jdbcType=TIMESTAMP},#{receiveTime,jdbcType=TIMESTAMP},
+		#{status,jdbcType=TINYINT},
+		#{subject,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{attachment,jdbcType=VARCHAR}
+		#{from.id},
+		#{to.id}
+		)
+	]]>
+	</insert>
+
+	<!-- update -->
+	<update id="update" parameterType="MessageEntity">
+	<![CDATA[
+		UPDATE
+		message 
+		SET
+		 id=#{id}
+		 ]]>
+		<if test="null != status">
+			<![CDATA[
+		,status = #{status}
+			]]>
+		</if>
+		
+		<choose>  
+            <when test="receiveTime !=null ">  
+                <![CDATA[
+					,receive_time = #{receiveTime}
+				]]>
+            </when >
+		  <otherwise> 
+		  	 <![CDATA[
+					,receive_time = now()
+				]]> 
+            </otherwise>  
+         </choose>
+		
+		<![CDATA[
+		WHERE  id = #{id} 
+	]]>
+	</update>
+
+	<!-- delete -->
+	<delete id="delete" parameterType="Long">
+	<![CDATA[
+		DELETE FROM message WHERE id = #{id}
+	]]>
+	</delete>
+	
+	<sql id="column_List" >
+   	 a.id,a.send_time,a.receive_time,a.status,a.subject,a.content,a.attachment,  from from_id,to to_id
+  	</sql>
+	
+	<!-- select detail -->
+	<select id="get" parameterType="java.lang.Long" resultMap="MessageResultMap">
+		SELECT 
+		<include refid="column_List" /> 
+		, from.name from_name, from.username from_username, from.email from_email, from.telephone from_telephone
+		, to.name to_name, to.username to_username, to.email to_email, to.telephone to_telephone
+		from   message a,user from,user to 
+		where  a.id = #{id} and a.from = from.id and a.to = to.id
+	</select>
+	
+	<!-- list -->
+	<select id="findByExample" resultMap="MessageResultMap"	parameterType="MessageEntityExample">
+	SELECT 
+		<include refid="column_List" /> 
+		, from.name from_name, from.username from_username, from.email from_email, from.telephone from_telephone
+		, to.name to_name, to.username to_username, to.email to_email, to.telephone to_telephone
+		from   message a,user from,user to 
+		
+	 	 <if test="_parameter != null" >
+	 	 
+	     	 <include refid="BaseMapper.Example_Where_Clause" />
+	     	 and a.from = from.id and a.to = to.id
+	        <include refid="BaseMapper.Example_Order_Clause" />
+			<include refid="BaseMapper.Example_Limit_Clause" />
+	       
+	    </if>
+	</select>
+	
+		<select id="countByExample" resultType="Integer"	parameterType="MessageEntityExample">
+	SELECT 	count(*)
+		from   message a,user from,user to 
+	 	 <if test="_parameter != null" >
+	     	 <include refid="BaseMapper.Example_Where_Clause" />
+	     	and a.from = from.id and a.to = to.id
+	    </if>
+	</select>
+</mapper>

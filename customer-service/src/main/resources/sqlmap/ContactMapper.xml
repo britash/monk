@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.monk.customer.service.dal.ContactMapper">
+
+	<resultMap id="ContactResultMap" type="ContactEntity" >
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="content" property="contents" jdbcType="VARCHAR" />
+		<result column="attachment" property="attachment" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="client_id" property="client.id" jdbcType="BIGINT" />
+		<result column="client_name" property="client.name" jdbcType="VARCHAR" />
+		<result column="client_username" property="client.username" jdbcType="VARCHAR" />
+		<result column="client_email" property="client.email" jdbcType="VARCHAR" />
+		<result column="client_telephone" property="client.telephone" jdbcType="VARCHAR" />
+	 </resultMap>
+
+	<!-- insert -->
+	<insert id="insert" parameterType="ContactEntity"
+		keyProperty="id" useGeneratedKeys="true">
+	<![CDATA[
+		INSERT INTO contact (
+		content,attachment,status,create_time,client_id)VALUES(
+		#{contents,jdbcType=VARCHAR},#{attachment,jdbcType=VARCHAR},
+		#{status,jdbcType=TINYINT},
+		#{createTime,jdbcType=TIMESTAMP},#{client.id,jdbcType=INTEGER})
+	]]>
+	</insert>
+
+	<!-- update -->
+	<update id="update" parameterType="ContactEntity">
+	<![CDATA[
+		UPDATE
+		contact 
+		SET
+		 id=#{id}
+		 ]]>
+		<if test="null != status">
+			<![CDATA[
+		,status = #{status}
+			]]>
+		</if>
+		<![CDATA[
+		WHERE  id = #{id} 
+	]]>
+	</update>
+
+	<!-- delete -->
+	<delete id="delete" parameterType="Long">
+	<![CDATA[
+		DELETE FROM contact WHERE id = #{id}
+	]]>
+	</delete>
+	
+	<sql id="column_List" >
+   	 a.id,a.content,a.attachment,a.status,a.create_time,a.client_id
+  	</sql>
+	
+	<!-- select detail -->
+	<select id="get" parameterType="java.lang.Long" resultMap="ContactResultMap">
+		SELECT 
+		<include refid="column_List" /> 
+		, b.name client_name, b.username client_username, b.email client_email, b.telephone client_telephone
+		from   contact a,user b 
+		where  a.id = #{id} and a.client_id = b.id
+	</select>
+	
+	<!-- list -->
+	<select id="findByExample" resultMap="ContactResultMap"	parameterType="ContactEntityExample">
+	SELECT 
+		<include refid="column_List" /> 
+		, b.name client_name, b.username client_username, b.email client_email, b.telephone client_telephone
+		from   contact a,user b 
+		
+	 	 <if test="_parameter != null" >
+	 	 
+	     	 <include refid="BaseMapper.Example_Where_Clause" />
+	     	  and a.client_id = b.id
+	        <include refid="BaseMapper.Example_Order_Clause" />
+			<include refid="BaseMapper.Example_Limit_Clause" />
+	       
+	    </if>
+	</select>
+	
+		<select id="countByExample" resultType="Integer"	parameterType="ContactEntityExample">
+	SELECT 	count(*)
+		from   contact a,user b 
+	 	 <if test="_parameter != null" >
+	     	 <include refid="BaseMapper.Example_Where_Clause" />
+	     	 and a.client_id = b.id
+	    </if>
+	</select>
+</mapper>
