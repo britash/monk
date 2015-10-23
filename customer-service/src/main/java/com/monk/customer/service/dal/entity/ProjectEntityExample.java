@@ -3,7 +3,7 @@ package com.monk.customer.service.dal.entity;
 
 import org.springframework.util.StringUtils;
 
-import com.monk.customer.common.EscapeUtils;
+import com.monk.customer.common.util.EscapeUtils;
 import com.monk.customer.service.dal.query.CriteriaOr;
 import com.monk.customer.service.dal.query.Criterion;
 

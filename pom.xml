@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.monk</groupId>
@@ -9,6 +10,7 @@
   		<module>customer-common</module>
 		<module>customer-web</module>
 		<module>customer-service</module>
+		<module>customer-admin</module>
   </modules>
   
   <name>customer</name>
@@ -227,7 +229,7 @@
 				<artifactId>ojdbc14</artifactId>
 				<version>11.2.0.4</version>
 			</dependency>
-			<!--druid 连接�?? -->
+			<!--druid 连接�??? -->
 			<dependency>
 				<groupId>com.alibaba</groupId>
 				<artifactId>druid</artifactId>

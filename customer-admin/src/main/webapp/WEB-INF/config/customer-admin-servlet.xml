@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd"
+	default-autowire="byType">
+
+	<!-- 开启注解配置 -->
+	<context:annotation-config />
+
+	<context:component-scan base-package="com.monk.customer.admin.web.controller" />
+
+	<aop:aspectj-autoproxy proxy-target-class="false" />
+	
+	<!-- velocity解析器 -->
+	<bean id="velocityView" class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">
+		<!--指定layout文件--> 
+		<property name="layoutUrl" value="layout/layout.vm" />
+		<!-- 视图文件的后缀名 -->
+		<property name="suffix" value=".vm" />
+		<!--是否使用spring对宏定义的支持-->
+		<property name="exposeSpringMacroHelpers" value="true" />
+		<!--日期函数名称-->
+		<property name="dateToolAttribute" value="dateTool" />
+		<!--数字函数名称-->  
+		<property name="numberToolAttribute" value="number" />
+		<!--toolbox配置文件路径-->  
+		<property name="toolboxConfigLocation" value="WEB-INF/velocity-toolbox.xml" />
+		<property name="contentType">
+			<value>text/html;charset=UTF-8</value>
+		</property>
+		  <property name="attributes">
+		    <props>
+		      <prop key="test">false</prop>
+		    </props>
+		  </property>
+	</bean>
+
+	<!-- velocity引擎 -->  
+	<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<!-- 模板存放的路径 -->
+		<property name="resourceLoaderPath" value="/WEB-INF/velocity/" />
+		<property name="velocityProperties">
+			<props>
+				<prop key="input.encoding">utf-8</prop>
+				<prop key="output.encoding">utf-8</prop>
+			</props>
+		</property>
+	</bean>
+	
+    <!-- just for test 
+	<mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean id="loginInterceptor" class="com.monk.customer.service.login.LoginInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>-->
+    <!-- end -->
+    
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html;charset=UTF-8</value>
+						<value>application/json;charset=UTF-8</value>
+						<value>text/plain;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+			<bean class="org.springframework.http.converter.FormHttpMessageConverter" />
+			<bean
+				class="org.springframework.http.converter.ByteArrayHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>image/jpeg</value>
+						<value>image/png</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<mvc:default-servlet-handler
+		default-servlet-name="default" />
+
+
+	<bean id="threadPoolTaskExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<!-- 核心线程数，默认为1 -->
+		<property name="corePoolSize" value="10" />
+		<!-- 最大线程数，默认为Integer.MAX_VALUE -->
+		<property name="maxPoolSize" value="50" />
+
+		<!-- 队列最大长度，一般需要设置值>=notifyScheduledMainExecutor.maxNum；默认为Integer.MAX_VALUE 
+			<property name="queueCapacity" value="1000" /> -->
+		<!-- 线程池维护线程所允许的空闲时间，默认为60s -->
+		<property name="keepAliveSeconds" value="300" />
+		<!-- 线程池对拒绝任务（无线程可用）的处理策略，目前只支持AbortPolicy、CallerRunsPolicy；默认为后者 -->
+		<property name="rejectedExecutionHandler">
+			<!-- AbortPolicy:直接抛出java.util.concurrent.RejectedExecutionException异常 -->
+			<!-- CallerRunsPolicy:主线程直接执行该任务，执行完之后尝试添加下一个任务到线程池中，可以有效降低向线程池内添加任务的速度 -->
+			<!-- DiscardOldestPolicy:抛弃旧的任务、暂不支持；会导致被丢弃的任务无法再次被执行 -->
+			<!-- DiscardPolicy:抛弃当前任务、暂不支持；会导致被丢弃的任务无法再次被执行 -->
+			<bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy" />
+
+		</property>
+
+	</bean>
+
+</beans>

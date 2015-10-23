@@ -102,4 +102,36 @@
 		     	 <include refid="BaseMapper.Example_Where_Clause" />
 		    </if>
 	</select>
+	
+	
+	<!-- insert -->
+	<insert id="insertUser" parameterType="CompanyEntity"
+		keyProperty="id" useGeneratedKeys="true">
+	<![CDATA[
+		INSERT INTO user_company (
+		company_id,user_id)VALUES(
+		#{companyId},
+		#{userId}
+		)
+	]]>
+	</insert>
+
+	<!-- update -->
+	<update id="updateUser" parameterType="CompanyEntity">
+	<![CDATA[
+		UPDATE
+		user_company 
+		SET
+		,company_id = #{companyId}
+		,user_id = #{userId}
+		WHERE  company_id = #{companyOldId}  and user_id = #{userOldId}
+		 ]]>
+	</update>
+
+	<!-- delete -->
+	<delete id="deleteUser" parameterType="Long">
+	<![CDATA[
+		DELETE FROM user_company WHERE company_id = #{companyOldId}  and user_id = #{userOldId}
+	]]>
+	</delete>
 </mapper>

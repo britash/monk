@@ -8,7 +8,7 @@ import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.alibaba.fastjson.serializer.ObjectSerializer;
 import com.alibaba.fastjson.serializer.SerializeWriter;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.monk.customer.common.MathUtils;
+import com.monk.customer.common.util.MathUtils;
 
 public class BigDecimalSerializer implements ObjectSerializer {
 

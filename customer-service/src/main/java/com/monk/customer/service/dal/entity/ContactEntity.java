@@ -10,6 +10,9 @@ public class ContactEntity extends AbstractEntity{
 	private String contents;
 	private String attachment;  //short_name
 	private Date createTime;//create_time;
+	private Date updateTime;
+	
+
 	private Integer status;
 	
 	private UserEntity client;
@@ -21,7 +24,13 @@ public class ContactEntity extends AbstractEntity{
 	public void setId(Long id) {
 		this.id = id;
 	}
+	public Date getUpdateTime() {
+		return updateTime;
+	}
 
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
 	public String getContents() {
 		return contents;
 	}

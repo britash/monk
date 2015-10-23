@@ -8,6 +8,7 @@
 		<result column="attachment" property="attachment" jdbcType="VARCHAR" />
 		<result column="status" property="status" jdbcType="TINYINT" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
 		<result column="client_id" property="client.id" jdbcType="BIGINT" />
 		<result column="client_name" property="client.name" jdbcType="VARCHAR" />
 		<result column="client_username" property="client.username" jdbcType="VARCHAR" />
@@ -20,10 +21,10 @@
 		keyProperty="id" useGeneratedKeys="true">
 	<![CDATA[
 		INSERT INTO contact (
-		content,attachment,status,create_time,client_id)VALUES(
+		content,attachment,status,create_time,update_time,client_id)VALUES(
 		#{contents,jdbcType=VARCHAR},#{attachment,jdbcType=VARCHAR},
 		#{status,jdbcType=TINYINT},
-		#{createTime,jdbcType=TIMESTAMP},#{client.id,jdbcType=INTEGER})
+		#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP},#{client.id,jdbcType=INTEGER})
 	]]>
 	</insert>
 
@@ -53,10 +54,10 @@
 	</delete>
 	
 	<sql id="column_List" >
-   	 a.id,a.content,a.attachment,a.status,a.create_time,a.client_id
+   	 a.id,a.content,a.attachment,a.status,a.create_time,a.update_time,a.client_id
   	</sql>
 	
-	<!-- select detail -->
+	<!-- select detail, maybe should add adminId in where condition for voiding no privilege user to get data-->
 	<select id="get" parameterType="java.lang.Long" resultMap="ContactResultMap">
 		SELECT 
 		<include refid="column_List" /> 
@@ -67,10 +68,10 @@
 	
 	<!-- list -->
 	<select id="findByExample" resultMap="ContactResultMap"	parameterType="ContactEntityExample">
-	SELECT 
+		SELECT 
 		<include refid="column_List" /> 
 		, b.name client_name, b.username client_username, b.email client_email, b.telephone client_telephone
-		from   contact a,user b 
+		from   contact a, user b, user_company c, user_company d
 		
 	 	 <if test="_parameter != null" >
 	 	 
@@ -82,9 +83,9 @@
 	    </if>
 	</select>
 	
-		<select id="countByExample" resultType="Integer"	parameterType="ContactEntityExample">
+	<select id="countByExample" resultType="Integer"	parameterType="ContactEntityExample">
 	SELECT 	count(*)
-		from   contact a,user b 
+		from   contact a, user b, user_company c,user_company d
 	 	 <if test="_parameter != null" >
 	     	 <include refid="BaseMapper.Example_Where_Clause" />
 	     	 and a.client_id = b.id

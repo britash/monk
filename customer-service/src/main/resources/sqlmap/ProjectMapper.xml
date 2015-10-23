@@ -30,7 +30,7 @@
 		#{steps,jdbcType=VARCHAR},
 		#{nextStep,jdbcType=VARCHAR},
 		#{createTime,jdbcType=TIMESTAMP},
-		#{upateTime,jdbcType=upate_time},
+		#{upateTime,jdbcType=TIMESTAMP},
 		#{factory.id}
 		)
 	]]>
