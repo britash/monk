@@ -29,7 +29,7 @@ public class CompanyEntityExample  extends CriteriaOr{
 		return null;
 	}
 		
-	public Criterion createUserIdEquals(Integer userId) {
+	public Criterion createUserIdEquals(Long userId) {
 		if (userId != null) {
 			return new Criterion("b.user_id =", userId);
 		}

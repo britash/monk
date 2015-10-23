@@ -23,7 +23,14 @@ public class CalenderEntityExample extends CriteriaOr {
 		}
 		return null;
 	}
-
+	
+	 public Criterion createStartTimeBetween(Date value1, Date value2) {
+	     	if(!StringUtils.isEmpty(value1)  &&  !StringUtils.isEmpty(value2)){
+	     		return new Criterion("a.start_time between", value1, value2);
+	     	}
+	     	return null;
+			}
+	 
 	public Criterion createStatusEquals(Integer status) {
 		if (status != null) {
 			return new Criterion("a.status =", status);
@@ -31,14 +38,14 @@ public class CalenderEntityExample extends CriteriaOr {
 		return null;
 	}
 	
-	public Criterion createAdminEquals(Integer adminId) {
+	public Criterion createAdminEquals(Long adminId) {
 		if (adminId != null) {
 			return new Criterion("a.admin_id =", adminId);
 		}
 		return null;
 	}
 	
-	public Criterion createClientEquals(Integer clientId) {
+	public Criterion createClientEquals(Long clientId) {
 		if (clientId != null) {
 			return new Criterion("a.client_id =", clientId);
 		}

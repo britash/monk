@@ -23,7 +23,7 @@ public class ProjectEntityExample  extends CriteriaOr{
 		return null;
 	}
 		
-	 public void setOrderWithPrority(String order){
+	 public void setOrderWithCreateTime(String order){
      	if(!StringUtils.isEmpty(order)){
      		this.orderByClause = "create_time " + order; 
      	}else{

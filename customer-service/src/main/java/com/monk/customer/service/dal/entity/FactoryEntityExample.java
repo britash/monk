@@ -29,7 +29,7 @@ public class FactoryEntityExample extends CriteriaOr{
 		return null;
 	}
 		
-	public Criterion createClientIdEquals(Integer clientId) {
+	public Criterion createClientIdEquals(Long clientId) {
 		if (clientId != null) {
 			return new Criterion("a.client_id =", clientId);
 		}
