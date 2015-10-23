@@ -63,7 +63,7 @@ CREATE TABLE `contact` (
   `content` varchar(1000) NOT NULL,
   `attachment` varchar(1000) NOT NULL,
   `create_time` datetime NOT NULL COMMENT '创建时间',
-  `update_date` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
   `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0:not read,1:has read',
   `client_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)

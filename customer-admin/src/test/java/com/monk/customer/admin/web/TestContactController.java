@@ -24,8 +24,8 @@ import com.monk.customer.admin.web.controller.ContactController;
 @ContextConfiguration(locations = { "classpath:spring-root-test.xml",
 		"classpath:customer-admin-servlet.xml" })
 @WebAppConfiguration
-public class TestExchangeRateController {
-	private static final Logger log = LoggerFactory.getLogger(TestExchangeRateController.class);
+public class TestContactController {
+	private static final Logger log = LoggerFactory.getLogger(TestContactController.class);
 
 	private MockMvc mvc;
 	@Autowired
@@ -50,30 +50,29 @@ public class TestExchangeRateController {
 		mvc.perform(post("/contact/save").param("contents", "contents")
 		.param("attachment","attachment")
 		.param("client.id","63")
-		).andExpect(status().isOk());
+		)	.andDo(MockMvcResultHandlers.print()).andExpect(status().isOk());
 	}
 	
-	//@Test
+	@Test
 	public void testDetail() throws Exception{
 		mvc.perform(get("/contact/get").param("id", "8"))
 			.andDo(MockMvcResultHandlers.print())
 		.andExpect(status().isOk());
 	}
 
-	@Test
+	//@Test
 	public void testUpdate() throws Exception{
 		mvc.perform(post("/contact/update").param("id","6").param("status", "1")
-				).andExpect(status().isOk());
+				)	.andDo(MockMvcResultHandlers.print()).andExpect(status().isOk());
 	}
 	
-	//@Test
 	public void testList() throws Exception{
 		mvc.perform(get("/exchangeRate/list").param("srcCurrencyCode", "1")
 				.param("targetCurrencyCode", "2")
 				.param("status", "1")
 				.param("creationDateStart", "2015-09-30 00:00:00")
 				.param("creationDateEnd","2015-10-15 00:00:00")
-				).andExpect(status().isOk());
+				)	.andDo(MockMvcResultHandlers.print()).andExpect(status().isOk());
 	}
 
 }

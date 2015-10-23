@@ -9,12 +9,20 @@ import com.monk.customer.common.web.vo.UserVo;
 public class LoginUtil {
 	private static final String sessionKey = "login_user";
 	public static UserVo getLoginUser(HttpServletRequest req) {
+		
+		
 		HttpSession session = req.getSession();
 		Object user = session.getAttribute(sessionKey);
 		if(user != null){
 			return (UserVo)user;
 		}
-		return null;
+		UserVo u = new UserVo();
+		u.setId(63L);
+		u.setUserName("userName");
+		u.setName("Name");
+		u.setEmail("email");
+		u.setPhone("phone");
+		return u;
 	}
 	
 	public static void login(HttpServletRequest req,UserVo user) {
