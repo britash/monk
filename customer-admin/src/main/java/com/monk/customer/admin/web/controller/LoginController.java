@@ -59,6 +59,7 @@ public class LoginController extends BaseController {
 				user.setUserName(existUser.getUsername());
 				user.setEmail(existUser.getEmail());
 				user.setName(existUser.getName());
+				user.setPhone(existUser.getTelephone());
 				LoginUtil.login(request, user);
 				log.debug("Exit result = {}", result);
 				return logAndEscapeResult(result.toJsonString(), request, log);
@@ -89,6 +90,7 @@ public class LoginController extends BaseController {
 				user.setUserName(existUser.getUsername());
 				user.setEmail(existUser.getEmail());
 				user.setName(existUser.getName());
+				user.setPhone(existUser.getTelephone());
 				LoginUtil.login(request, user);
 				log.debug("Exit result = {}", result);
 				return logAndEscapeResult(result.toJsonString(), request, log);

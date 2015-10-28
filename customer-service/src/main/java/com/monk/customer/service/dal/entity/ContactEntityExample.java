@@ -13,7 +13,7 @@ public class ContactEntityExample  extends CriteriaOr{
 	
 	 public Criterion createContentsLike(String contents) {
      	if(!StringUtils.isEmpty(contents)){
-     		return new Criterion("a.contents like", "%" + EscapeUtils.escapeSql(contents) + "%");
+     		return new Criterion("a.content like", "%" + EscapeUtils.escapeSql(contents) + "%");
      	}
      	return null;
      }

@@ -13,11 +13,6 @@ public class MessageVo extends ParentParamComponent{
 
 	private UserVo to = new UserVo();
 	
-	
-	/**
-	 * 
-	 */
-	private Integer target = 0;
 
 	
 	public String getSubject() {

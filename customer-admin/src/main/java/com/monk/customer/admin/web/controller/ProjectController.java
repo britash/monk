@@ -21,11 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.monk.customer.common.constants.Constants;
 import com.monk.customer.common.util.JsonResult;
 import com.monk.customer.common.util.PageVo;
-import com.monk.customer.common.web.vo.FactoryVo;
 import com.monk.customer.common.web.vo.ProjectVo;
-import com.monk.customer.service.FactoryService;
 import com.monk.customer.service.ProjectService;
-import com.monk.customer.service.dal.entity.FactoryEntity;
 import com.monk.customer.service.dal.entity.ProjectEntity;
 
 @RestController

@@ -18,6 +18,17 @@ public class UserVo extends ParentParamComponent{
 	
 	private Integer status;
 	
+	private Long commpanyId;
+	
+	
+	public Long getCommpanyId() {
+		return commpanyId;
+	}
+
+	public void setCommpanyId(Long commpanyId) {
+		this.commpanyId = commpanyId;
+	}
+
 	public String getPhone() {
 		return phone;
 	}

@@ -29,6 +29,14 @@ public class UserEntityExample extends CriteriaOr{
         	return null;
         }
         
+        public Criterion createAdminIdEquals(Long admin,Long companyId) {
+        	if(admin != null && companyId != null ){
+        		return new Criterion("b.user_id ="+ admin +" and b.company_id="+companyId+ " and b.company_id = c.company_id and a.id = c.user_id");
+        	}
+        	return null;
+        }
+        
+        
         public Criterion createTypeEquals(Integer type) {
         	if(!StringUtils.isEmpty(type)){
         		return new Criterion("a.type =", type);

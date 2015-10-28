@@ -24,8 +24,8 @@ import com.monk.customer.admin.web.controller.ContactController;
 @ContextConfiguration(locations = { "classpath:spring-root-test.xml",
 		"classpath:customer-admin-servlet.xml" })
 @WebAppConfiguration
-public class TestContactController {
-	private static final Logger log = LoggerFactory.getLogger(TestContactController.class);
+public class TestUserController {
+	private static final Logger log = LoggerFactory.getLogger(TestUserController.class);
 
 	private MockMvc mvc;
 	@Autowired

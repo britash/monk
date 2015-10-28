@@ -153,4 +153,27 @@
 	     	 <include refid="BaseMapper.Example_Where_Clause" />
 	    </if>
 	</select>
+	
+	<!-- list -->
+	<select id="findCustomerForAdmin" resultMap="UserResultMap"	parameterType="ContactEntityExample">
+		SELECT 
+		<include refid="column_List" /> 
+		from   user a, user_company b, user_company b
+		
+	 	 <if test="_parameter != null" >
+	     	 <include refid="BaseMapper.Example_Where_Clause" />
+	        <include refid="BaseMapper.Example_Order_Clause" />
+			<include refid="BaseMapper.Example_Limit_Clause" />
+	    </if>
+	</select>
+	
+	<!-- list -->
+	<select id="countCustomerForAdmin" resultMap="Integer"	parameterType="ContactEntityExample">
+		SELECT 
+		<include refid="column_List" /> 
+		from   user a, user_company b, user_company b
+	 	 <if test="_parameter != null" >
+	     	 <include refid="BaseMapper.Example_Where_Clause" />
+	    </if>
+	</select>
 </mapper>
